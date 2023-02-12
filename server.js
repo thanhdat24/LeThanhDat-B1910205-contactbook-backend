@@ -1,8 +1,20 @@
 const app = require("./app");
 const config = require("./app/config");
 
-// lắng nghe event kết nối
-const PORT = config.app.port;
-const server = app.listen(PORT, () => {
-  console.log(`Server listening on port ${PORT}...`);
-});
+const MongoDB = require("./app/utils/mongodb");
+
+async function startServer() {
+  try {
+    await MongoDB.connect(config.db.uri);
+    console.log("Connect to the database!");
+    const PORT = config.app.port;
+    app.listen(PORT, () => {
+      console.log(`Server listening on port ${PORT}...`);
+    });
+  } catch (error) {
+    console.log("Cannot connect to the database!", error);
+    process.exit();
+  }
+}
+
+startServer();
