@@ -97,21 +97,36 @@ exports.delete = async (req, res, next) => {
 
 // Chức năng xóa tất cả liên hệ
 exports.deleteAll = async (_req, res, next) => {
-    try {
-        const contactService = new ContactService(MongoDB.client);
-        const deletedCount = await contactService.deleteAll();
-        return res.send({message: `${deletedCount} contacts was deleted successfully`})
-    } catch (error) {
-        return next(new ApiError(500, 'Error updating contact'));
-    }
-}
+  try {
+    const contactService = new ContactService(MongoDB.client);
+    const deletedCount = await contactService.deleteAll();
+    return res.send({
+      message: `${deletedCount} contacts was deleted successfully`,
+    });
+  } catch (error) {
+    return next(new ApiError(500, "Error updating contact"));
+  }
+};
 
 // Tìm tất cả liên hệ được yêu thích
 exports.findAllFavorite = async (_req, res, next) => {
-  // res.send({message: "findAllFavorite handler"});
   try {
     const contactService = new ContactService(MongoDB.client);
     const documents = await contactService.findFavorite();
+    return res.send(documents);
+  } catch (error) {
+    return next(
+      new ApiError(500, "An error occurred while retrieving favorite contacts")
+    );
+  }
+};
+
+// Tìm tất cả liên hệ được yêu thích theo số điện thoại
+exports.findFavoriteByPhone = async (_req, res, next) => {
+  const { phone } = _req.query;
+  try {
+    const contactService = new ContactService(MongoDB.client);
+    const documents = await contactService.findFavoriteByPhone(phone);
     return res.send(documents);
   } catch (error) {
     return next(

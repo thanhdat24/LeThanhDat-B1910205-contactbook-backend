@@ -86,6 +86,13 @@ class ContactService {
   async findFavorite() {
     return await this.find({ favorite: true });
   }
+
+  // Tìm tất cả liên hệ được yêu thích và theo số điện thoại
+  async findFavoriteByPhone(phone) {
+    return await this.find({
+      $and: [{ favorite: true }, { phone }],
+    });
+  }
 }
 
 module.exports = ContactService;

@@ -11,6 +11,8 @@ router
 
 router.route("/favorite").get(contacts.findAllFavorite);
 
+router.route("/favorite-by-phone").get(contacts.findFavoriteByPhone);
+
 router
   .route("/:id")
   .get(contacts.findOne)
